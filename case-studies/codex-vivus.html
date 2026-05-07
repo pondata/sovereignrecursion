@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codex Vivus: a working reference architecture for organizational AI knowledge | Sovereign Recursion</title>
+  <meta name="description" content="An eighteen-month-old AI knowledge graph indexing 4,948 conversations and 37.7M words. Architecture, lessons, and the four engagement patterns it implies.">
+  <meta property="og:title" content="Codex Vivus: a working reference architecture for organizational AI knowledge">
+  <meta property="og:description" content="An eighteen-month-old AI knowledge graph indexing 4,948 conversations and 37.7M words. Architecture, lessons, and the four engagement patterns it implies.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://sovereignrecursion.com/case-studies/codex-vivus.html">
+  <link rel="canonical" href="https://sovereignrecursion.com/case-studies/codex-vivus.html">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0a'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='%23e5e7eb' font-family='Georgia,serif' font-size='20' font-weight='700'%3ES%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0a0a0a;
+      --paper: #fafaf7;
+      --muted: #6b7280;
+      --rule: #d4d4d0;
+      --accent: #1f2937;
+      --highlight: #b45309;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Source Serif 4', Georgia, serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      font-size: 18px;
+    }
+    .container { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; }
+    header { padding: 4rem 2rem 0; max-width: 700px; margin: 0 auto; }
+    .brand {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--ink);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .brand-mark {
+      display: inline-block;
+      width: 0.6em;
+      height: 0.6em;
+      background: var(--highlight);
+      margin-right: 0.4em;
+      transform: rotate(45deg);
+      vertical-align: middle;
+    }
+    h1 {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 1rem 0 1rem;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      letter-spacing: -0.01em;
+    }
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.5rem;
+    }
+    p { margin-bottom: 1.25rem; }
+    .meta {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-color: var(--highlight);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    a:hover { text-decoration-color: var(--ink); }
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+      background: rgba(0,0,0,0.04);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 1.25rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    pre code { background: none; color: inherit; padding: 0; }
+    blockquote {
+      border-left: 3px solid var(--highlight);
+      padding: 0.25rem 0 0.25rem 1.25rem;
+      margin: 1.5rem 0;
+      color: var(--accent);
+      font-style: italic;
+    }
+    .back {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+    .cta {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 2rem;
+      margin: 3rem 0;
+      border-radius: 4px;
+    }
+    .cta h2 { color: var(--paper); margin-top: 0; }
+    .cta p { color: #d4d4d0; }
+    .cta a { color: var(--paper); }
+    .cta-button {
+      display: inline-block;
+      background: var(--highlight);
+      color: var(--paper) !important;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none !important;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 0.75rem;
+      border-radius: 2px;
+    }
+    footer {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--rule);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="brand"><span class="brand-mark"></span>Sovereign Recursion</a>
+</header>
+
+<div class="container">
+
+  <a href="/" class="back">&larr; Back</a>
+
+  <h1>Codex Vivus: a working reference architecture for organizational AI knowledge</h1>
+  <p class="meta">Justin Oberg &middot; 2026-05-07</p>
+
+  <p>For the last eighteen months I've been building a personal AI knowledge graph called <strong>Codex Vivus</strong>. As of this morning it indexes 4,948 conversations totaling 37.7 million words, spanning April 2023 to last month. The graph is local-first (SQLite + FTS5), full-text searchable in under 100&nbsp;ms across the entire corpus, includes a tiered scoring layer, topic clustering, lint analysis for stale or orphaned threads, and an extraction pipeline that surfaces monetizable patterns.</p>
+
+  <p>I built it for myself. It is, and remains, personal infrastructure. But every time I run it for a colleague — every time someone watches me find something they'd written about a year ago in two seconds — they ask the same question: <em>"How do I get one of these for my firm?"</em></p>
+
+  <p>This post explains what Codex Vivus is, how the architecture works, and what the equivalent looks like applied to an organization rather than an individual. The architectural pattern is what Sovereign Recursion offers as a service. The system itself stays personal — but it serves as the working reference implementation that proves the pattern is real.</p>
+
+  <h2>The problem</h2>
+
+  <p>Every knowledge-driven organization has the same accumulating crisis. Decades of Slack messages, email threads, conversation transcripts, partner notes, deal histories, technical decisions, client conversations, and internal memos sit in dozens of systems — and not one of them is searchable in a way that returns useful results. Senior people retire and their accumulated judgment leaves the building. New hires take 18 months to learn what's already been figured out. The CIO is asked at every board meeting <em>"what's our AI strategy"</em> and there is no good answer because the layer underneath — actual structured access to the firm's institutional knowledge — does not exist.</p>
+
+  <p>Most "AI strategy" pitches landing in your inbox right now are slideware. Vendors and consultancies are selling the future tense: <em>"we'll build you a knowledge platform."</em> What's missing is anyone showing a working reference implementation and saying <em>"here's an architecture that already works, here's what it would look like applied to your domain, here's the build cost and timeline."</em></p>
+
+  <p>The system below is running on my laptop right now.</p>
+
+  <h2>What Codex Vivus actually does</h2>
+
+  <p>Five categories of capability, each backed by a working command-line interface:</p>
+
+  <h3>1. Ingest</h3>
+  <p>Conversation exports (ChatGPT JSON, Claude JSONL, Anthropic console transcripts), plain-text documents, notes piped from stdin, and structured project artifacts all flow into a single SQLite store. New conversations can be added incrementally without re-indexing. The schema retains source provenance — which platform, which date, which model — so I can later filter <em>"everything I worked on with Claude in 2025"</em> or <em>"every conversation about logistics from before March 2024."</em></p>
+
+  <h3>2. Score</h3>
+  <p>Each conversation gets a tier (S, A, B, C, D) based on word count, structural depth, recurrence of themes, and signal-to-fluff ratios. Categories are inferred: Code, Business, AI, History, Music, Geopolitics, Personal, Creative, Science, General. Current corpus distribution: 1,908 S-tier (38%), 1,698 A-tier (34%), 1,106 B-tier (22%), with the remainder lower. Translation: roughly 70% of my AI-conversation hours have been on substantive work, which is information I couldn't have surfaced any other way.</p>
+
+  <h3>3. Search and link</h3>
+  <p>Full-text search (FTS5) over the entire 37.7M-word corpus returns ranked results in under 100&nbsp;ms on a five-year-old laptop. <code>search "supply chain"</code> returns the 20 most relevant conversations. <code>related &lt;convo-id&gt;</code> finds thematically adjacent conversations regardless of literal keyword overlap. <code>top S Code</code> shows the 20 highest-scoring code-tier conversations. Topic clustering is computed once and cached.</p>
+
+  <h3>4. Lint</h3>
+  <p>The most under-appreciated feature. The graph is examined for: open threads (questions raised but not resolved), stale topics (active for months then abandoned), convergences (two conversation lines apparently working toward the same insight without realizing it), and orphans (one-off threads with no connections). The lint output is the closest thing I have to a list of <em>"things I started thinking about and need to either resume or formally abandon."</em></p>
+
+  <h3>5. Extract and write back</h3>
+  <p>The system generates topic pages — Wikipedia-style summaries of what the corpus says about a given concept — and includes a monetization-pattern extractor that surfaces conversation threads that look like they could become products, services, or content. The graph isn't read-only; it suggests what to do next.</p>
+
+  <h2>The architecture, briefly</h2>
+
+  <p>Six layers, each replaceable:</p>
+
+  <pre><code>┌─────────────────────────────────────────────────────────────┐
+│ CLI / Wiki / Brief / Prompt-Generator (top)                 │
+├─────────────────────────────────────────────────────────────┤
+│ Engine — search, link, lint, score, extract                 │
+├─────────────────────────────────────────────────────────────┤
+│ Graph — SQLite + FTS5 + cached topic-cluster index          │
+├─────────────────────────────────────────────────────────────┤
+│ Ingestion — JSON/JSONL/text/note adapters per source        │
+├─────────────────────────────────────────────────────────────┤
+│ Scoring — tier + category classifier (deterministic + LLM)  │
+├─────────────────────────────────────────────────────────────┤
+│ Storage — local-first .db file (~500MB at 5M words)         │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+
+  <p>The whole thing is TypeScript, runs on Node 22, and the database is portable. No cloud dependencies for the core capability. LLM calls are used at scoring time only and are cached so the corpus can be queried without further API spend.</p>
+
+  <p>This is deliberate. Most "AI knowledge platform" vendor offerings are SaaS-shaped — your data lives in their cloud, you pay per-seat per-month, the lock-in is total, and your institutional knowledge becomes a hostage to their pricing decisions. Codex Vivus is built the other way around: the data is yours, the index lives on your hardware, the operator owns the schema. SaaS vendors and LLM APIs become tools you call, not platforms you depend on.</p>
+
+  <p>This is the architectural pattern Sovereign Recursion deploys for organizations.</p>
+
+  <h2>What eighteen months of running it has taught me</h2>
+
+  <p>Five lessons that aren't obvious until you have a working system:</p>
+
+  <h3>The graph is more valuable than the conversations</h3>
+  <p>Any individual conversation is forgettable. The pattern across 4,948 of them is not. Codex Vivus has surfaced which themes I've returned to most often (system architecture, civic infrastructure, AI takeoff scenarios, supply chains, Pacific Northwest history), which ones I started and dropped (most of them), and which ones cluster suspiciously close together — work I'd been doing in parallel without realizing it was the same work. The meta-layer has produced more useful insight than any individual chat.</p>
+
+  <h3>Search is not enough</h3>
+  <p>Pure full-text search returns 200 hits for any meaningful query. Without the tiering layer (which 20 of these are S-tier?) and the link layer (which of these is the conversation that actually resolved this question?), the search results are just more noise. The value is in the <em>filtering</em>, not the indexing.</p>
+
+  <h3>Lint matters more than recall</h3>
+  <p>The hardest knowledge-management problem in any organization isn't <em>"I can't find what I wrote."</em> It's <em>"I don't remember what's still open."</em> Lint output — the list of unresolved threads, abandoned topics, and convergences — is what actually changes daily behavior. Recall lets you re-find. Lint shows you what's leaking.</p>
+
+  <h3>Most "AI strategy" advice misses the foundation</h3>
+  <p>Generative AI is downstream of structured access to your data. Without a real knowledge graph underneath, every AI deployment in your firm is a chatbot on top of a confused content layer. The interesting capability isn't the LLM — it's what you point the LLM at. Most firms haven't built the underneath yet.</p>
+
+  <h3>Local-first beats SaaS-first for institutional knowledge</h3>
+  <p>The minute your knowledge graph lives on someone else's cloud, you've recreated the problem you were trying to solve — your knowledge is no longer yours. Local-first architectures are not just more secure; they're philosophically aligned with what a firm's institutional knowledge actually is.</p>
+
+  <h2>What an organizational version looks like</h2>
+
+  <p>Four common shapes that come up repeatedly in conversations with operators who've watched the demo:</p>
+
+  <h3>Pattern A — The departing-partner archive</h3>
+  <p>Mid-size law firm, consultancy, or professional-services firm where senior partners are within five years of retirement. Their accumulated client knowledge, deal history, and judgment lives in their email and their head. The deliverable: a knowledge graph that ingests the partner's email archive (with consent and scope discipline), structured exit interviews, case files, and engagement memos — and produces a queryable institutional artifact that survives the partner's departure. <strong>$75k–$150k, 8–12 weeks.</strong></p>
+
+  <h3>Pattern B — The deal-history graph</h3>
+  <p>Family office or VC firm with 10–25 years of deal flow, partner introductions, due diligence memos, and portfolio company notes. The deliverable: an indexed graph that can answer "have we ever looked at a company like this before?", "who introduced us to X", and "what did our analysis say about industry Y in 2017?". <strong>$100k–$200k, 12–16 weeks.</strong></p>
+
+  <h3>Pattern C — The technical archive</h3>
+  <p>Architecture/engineering firm, defense contractor, or research-driven organization with decades of technical documents, project artifacts, simulation outputs, and design rationale. The deliverable: a structured graph layered onto the existing document store, with retention rules, classification handling, and integration with the firm's existing security perimeter. <strong>$100k–$300k, 12–16 weeks.</strong></p>
+
+  <h3>Pattern D — The fractional knowledge officer</h3>
+  <p>Smaller engagement: an organization that's been pitched AI strategy a hundred times and wants someone with a working reference architecture to spend two days a month with their leadership team — diagnosing where institutional knowledge is leaking, prototyping fixes, assessing AI-vendor pitches. <strong>$5k–10k/month, ongoing.</strong></p>
+
+  <h2>How engagements work</h2>
+
+  <p>Sovereign Recursion takes four to six of these per year. The first conversation is free, takes 30 minutes, and is purely diagnostic — what does the organization's institutional knowledge actually look like, and is a knowledge graph the right next step. Some firms walk away with a clear sense that they don't need this yet, and that's a fine outcome.</p>
+
+  <p>Engagements are fixed-scope and fixed-price. No hourly billing for build work. The deliverable is a working system, not a deck. Remote by default with one or two in-person workshops. The codebase and the data are yours; the schema and methodology are documented; the system is maintainable by an internal team after delivery.</p>
+
+  <p>My background is in federal-aerospace systems work and commercial logistics integration. I built Codex Vivus because nothing existing worked the way I needed it to. The same is usually true of the organizations I'd want to work with.</p>
+
+  <div class="cta">
+    <h2>Diagnostic conversation</h2>
+    <p>If this architecture looks like the answer to a problem you've been carrying — partner succession, deal-history loss, technical-archive sprawl, or a board that keeps asking about AI strategy with no foundation underneath — a 30-minute conversation is worth the time.</p>
+    <a class="cta-button" href="mailto:justin@sovereignrecursion.com?subject=Knowledge%20graph%20diagnostic">justin@sovereignrecursion.com</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Sovereign Recursion &middot; Vancouver, WA &middot; Justin Oberg, principal</p>
+</footer>
+
+</body>
+</html>
