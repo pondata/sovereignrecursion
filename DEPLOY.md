@@ -58,32 +58,42 @@ If DNS is at a different registrar (GoDaddy / Namecheap / etc):
 - Add `CNAME` for `www` → same target
 - Or transfer DNS to Cloudflare for cleaner DNSLINK support (recommended for the 2126 stack)
 
-### 4. IPFS pin (the 2126 layer)
+### 4. IPFS pin — **deliberately not used**
 
-Two-line version with web3.storage:
+**Decision (2026-05-07):** No IPFS layer.
 
-```bash
-# After installing w3 CLI: npm install -g @web3-storage/w3cli
-w3 login your@email.address
-w3 space create sovereign-recursion
-w3 up ~/sovereign-recursion --no-wrap
-# Copy the returned CID (e.g. bafybeigd...)
-```
+Attempted via web3.storage; the Protocol Labs identity service had the
+operator's email on a blocklist for opaque reasons traceable to a years-old
+adverse interaction with someone now associated with PL. Rather than
+appeal-and-pay-for-the-block-to-be-removed, we routed around the dependency
+entirely.
 
-Then in Cloudflare DNS for `sovereignrecursion.com`:
+PL is the foundational org behind IPFS, libp2p, and most of the surrounding
+ecosystem. Using a non-PL pinning service (Pinata etc.) would still keep us
+on PL-built protocol layers. Using a non-IPFS decentralized-storage protocol
+(Arweave, Sia, etc.) would mean adopting a new dependency just to satisfy a
+durability checkbox.
 
-```
-TXT  _dnslink  "dnslink=/ipfs/bafybeigd..."
-```
+Per the principle: *each recursive call must increase independence*. Trading
+one centralized capture (PL) for another (Arweave Foundation, etc.) does
+not improve the position. The honest move is to acknowledge that "permanent
+decentralized storage" is an aspiration, not an achievable single-step ship.
 
-The site is now reachable three ways:
-- `https://sovereignrecursion.com/` (Cloudflare Pages)
-- `https://sovereignrecursion.com.ipns.dweb.link/` (IPFS gateway, follows DNSLINK)
-- `https://bafybeigd....ipfs.dweb.link/` (direct IPFS CID, immutable)
+**What we have instead:**
 
-If Cloudflare Pages or web3.storage disappears in 2126, the third URL still
-works as long as anyone is pinning the CID. That's the property the principle
-demands.
+- Source on GitHub (mirrorable to Codeberg / GitLab / sourcehut at any time)
+- Static site small enough to fit in a single email attachment
+- Cloudflare Pages serving from $0/mo
+- DNS at Cloudflare, transferable in ~24 hours if needed
+- Email routing at Cloudflare, replaceable in ~10 min
+
+Any single layer above can be lost without losing the others. That is the
+sovereign-recursion property in practice — not "no one can block you," but
+"no single block can take you down."
+
+**If durability becomes a real concern later:** push mirrors to Codeberg
++ GitLab + sourcehut, run a small VPS-hosted instance as a backup origin,
+or revisit Arweave with a fresh wallet (no PL identity entanglement).
 
 ### 5. Email routing
 
@@ -103,21 +113,40 @@ git config commit.gpgsign true
 The Cloudflare Pages "Verified" badge on commits is downstream of this; for a
 2126 audit trail, signed commits matter more than the badge.
 
-## What "shipped" means here
+## What shipped (2026-05-07)
 
-The minimum viable ship:
-- [ ] Source pushed to github.com/pondata/sovereignrecursion
-- [ ] Cloudflare Pages connected, deploy succeeds
-- [ ] `sovereignrecursion.com` resolves, HTTPS works
-- [ ] `justin@sovereignrecursion.com` forwards somewhere
+- [x] Source pushed to github.com/pondata/sovereignrecursion (public)
+- [x] Cloudflare Pages connected, auto-deploys on push
+- [x] `sovereignrecursion.com` resolves, HTTPS active
+- [x] `justin@sovereignrecursion.com` forwards via Cloudflare Email Routing
+- [x] Anchor essay live at `/essays/sovereign-recursion-jurisdictional-firewall/`
+- [x] /essays/ index, /architecture/ stub
+- [~] IPFS pin — **deliberately skipped**, see Step 4 above
+- [ ] Essays #2 (L1–L5) and #3 (Eval Is the Work) — drafted in Codex Vivus
+      monetization folder, awaiting publish
+- [ ] HN submission of anchor essay
+- [ ] recursive-agent-stack repo (separate from this one) — planned
 
-The 2126-grade ship:
-- [ ] Above, plus:
-- [ ] IPFS CID published, DNSLINK TXT record live
-- [ ] Site reachable via at least one IPFS gateway
-- [ ] Source commits SSH or PGP signed
-- [ ] Content hash recorded in a separate verifiable location (e.g. a git
-      tag, a tweet, a witness)
+The site is live. The principle is named in public.
 
-The minimum ship is enough to be live. The 2126-grade ship is what makes the
-artifact archival.
+## The next moves (when ready)
+
+1. **HN submission.** Title: *Sovereign Recursion: Why Your Self-Improving
+   Agent Needs a Jurisdictional Firewall.* URL:
+   `https://sovereignrecursion.com/essays/sovereign-recursion-jurisdictional-firewall/`
+   Best slot: Tuesday-Thursday morning Pacific. Comment substantively in
+   your own thread for the first hour.
+
+2. **Publish essay #2** (L1–L5: A Layered Model for Recursive Agents) at
+   `/essays/l1-l5-layered-model-recursive-agents/`. Source markdown is at
+   `~/codex-vivus/monetization/launch/essay-2-full.md`. Same conversion
+   pattern as the anchor.
+
+3. **Publish essay #3** (Eval Is the Work). Same pattern.
+
+4. **Set up the open-source `recursive-agent-stack` repo** (separate from
+   this site repo) — even an empty README + module structure is enough to
+   make the link in the colophon real.
+
+5. **Architecture page expansion.** Right now it's a stub. When the engagement
+   patterns and pricing crystallize, this is where they live.
