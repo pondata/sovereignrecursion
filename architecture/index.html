@@ -4,25 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Architecture — Sovereign Recursion</title>
-  <meta name="description" content="The architecture of sovereign-recursive systems and how engagements are conducted.">
+  <meta name="description" content="The layered architecture of sovereign-recursive systems, the engagement tiers through which it is brought into organizations, and how to begin a conversation.">
   <meta property="og:title" content="Architecture — Sovereign Recursion">
+  <meta property="og:description" content="L1–L5 layered model. Four engagement tiers from $7,500 review to $75–150k bespoke build. By correspondence, by appointment.">
   <meta property="og:url" content="https://sovereignrecursion.com/architecture/">
   <link rel="canonical" href="https://sovereignrecursion.com/architecture/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f5efe2'/%3E%3Cpath d='M16 7 L23 16 L16 25 L9 16 Z' fill='none' stroke='%231a1410' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%238b3a1c'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --paper: #f5efe2;
+      --paper-edge: #ebe2d0;
+      --paper-shade: #efe7d3;
       --ink: #1a1410;
-      --ink-mid: #4a3f33;
-      --ink-soft: #7a6e5e;
+      --ink-mid: #36302a;
+      --ink-soft: #6e6557;
       --rule: #c8bea7;
       --madder: #8b3a1c;
+      --madder-soft: #a85a3c;
     }
-    html { background: #ebe2d0; }
+    html { background: var(--paper-edge); }
     body {
       background: var(--paper);
       color: var(--ink);
@@ -30,9 +34,9 @@
       font-size: 21px;
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
-      max-width: 40rem;
+      max-width: 42rem;
       margin: 0 auto;
-      padding: 6rem 2.5rem 5rem;
+      padding: 5rem 2.5rem 5rem;
       min-height: 100vh;
     }
     .breadcrumb {
@@ -47,65 +51,230 @@
     .breadcrumb a:hover { color: var(--madder); border-bottom-color: var(--madder); }
     h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
+      font-size: clamp(1.7rem, 3.5vw, 2.2rem);
       font-weight: 500;
       margin-bottom: 0.4rem;
+      letter-spacing: -0.005em;
     }
     .subtitle {
       font-style: italic;
       color: var(--ink-soft);
-      margin-bottom: 3rem;
-      font-size: 1.1rem;
+      margin-bottom: 3.5rem;
+      font-size: 1.15rem;
     }
     h2 {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-weight: 400;
-      font-size: 1.4rem;
+      font-weight: 500;
+      font-size: 1.45rem;
       color: var(--ink-mid);
-      margin: 3rem 0 1rem;
+      margin: 4rem 0 1.3rem;
+      letter-spacing: -0.005em;
     }
     p { color: var(--ink-mid); margin-bottom: 1.2rem; }
     p strong { color: var(--ink); font-weight: 500; }
-    .pattern {
-      padding: 1.4rem 0;
-      border-bottom: 0.5px solid var(--rule);
-    }
-    .pattern:first-of-type { border-top: 0.5px solid var(--rule); }
-    .pattern h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      font-weight: 500;
-      margin-bottom: 0.3rem;
-    }
-    .pattern .meta {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-      margin-bottom: 0.6rem;
-    }
-    .pattern p { font-size: 1.05rem; margin-bottom: 0; }
-    pre {
-      background: rgba(26,20,16,0.04);
-      border-left: 2px solid var(--rule);
-      padding: 1rem 1.2rem;
+
+    /* The architecture diagram */
+    pre.ascii {
+      background: #2a221c;
+      color: #e8dfc8;
+      padding: 1.4rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 2rem -0.5rem;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.78rem;
-      line-height: 1.55;
-      color: var(--ink-mid);
-      overflow-x: auto;
-      margin: 1.5rem 0;
+      line-height: 1.5;
     }
+
+    /* The invariant pull-quote */
     .invariant {
+      font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      color: var(--madder);
-      border-left: 2px solid var(--madder);
-      padding: 0.5rem 0 0.5rem 1.2rem;
-      margin: 1.5rem 0;
-      font-size: 1.05rem;
+      font-size: 1.2rem;
+      line-height: 1.55;
+      color: var(--ink);
+      border-left: 3px solid var(--madder);
+      padding: 0.6rem 0 0.6rem 1.4rem;
+      margin: 2rem 0;
     }
+    .invariant strong { color: var(--madder); font-weight: 500; font-style: normal; }
+
+    /* Engagement tiers */
+    .tiers {
+      margin: 1.5rem 0 0;
+    }
+    .tier {
+      padding: 1.8rem 0;
+      border-bottom: 0.5px solid var(--rule);
+    }
+    .tier:first-of-type { border-top: 0.5px solid var(--rule); }
+    .tier-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.3rem;
+    }
+    .tier h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      color: var(--ink);
+      margin: 0;
+    }
+    .tier .price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      color: var(--madder);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .tier .meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 0.7rem;
+    }
+    .tier p {
+      font-size: 1.05rem;
+      margin-bottom: 0.6rem;
+    }
+    .tier ul {
+      padding-left: 1.2rem;
+      margin: 0.6rem 0 0;
+    }
+    .tier li {
+      font-size: 1rem;
+      color: var(--ink-mid);
+      margin-bottom: 0.3rem;
+    }
+
+    /* Process */
+    .process {
+      margin: 1rem 0 0;
+      padding-left: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+    .process li {
+      counter-increment: step;
+      padding: 1rem 0 1rem 3rem;
+      position: relative;
+      border-bottom: 0.5px solid var(--rule);
+    }
+    .process li:last-child { border-bottom: none; }
+    .process li::before {
+      content: counter(step, upper-roman);
+      position: absolute;
+      left: 0;
+      top: 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--madder);
+      font-weight: 500;
+    }
+    .process li strong {
+      display: block;
+      color: var(--ink);
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+    .process li p {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    /* CTA block */
+    .cta {
+      margin: 4rem 0 2rem;
+      padding: 2.5rem 2rem;
+      background: var(--paper-shade);
+      border: 1px solid var(--rule);
+      text-align: center;
+    }
+    .cta p.cta-lede {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .cta-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .cta-button {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper) !important;
+      padding: 0.85rem 1.6rem;
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: 1px solid var(--ink);
+      transition: background 0.2s, color 0.2s;
+    }
+    .cta-button:hover {
+      background: var(--madder);
+      border-color: var(--madder);
+    }
+    .cta-button.secondary {
+      background: var(--paper);
+      color: var(--ink) !important;
+      border: 1px solid var(--ink);
+    }
+    .cta-button.secondary:hover {
+      background: var(--ink);
+      color: var(--paper) !important;
+    }
+    .cta-note {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      font-style: italic;
+      margin: 0;
+    }
+
+    /* FAQ */
+    .faq-item {
+      padding: 1rem 0;
+      border-bottom: 0.5px solid var(--rule);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+    .faq-item p {
+      font-size: 1rem;
+      color: var(--ink-mid);
+      margin-bottom: 0;
+    }
+
+    a.inline {
+      color: var(--madder);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(139,58,28,0.3);
+    }
+    a.inline:hover { border-bottom-color: var(--madder); }
+
+    /* Footer */
     footer {
       margin-top: 5rem;
       padding-top: 2rem;
@@ -115,75 +284,196 @@
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--ink-soft);
+      line-height: 2;
     }
     footer a { color: var(--ink-mid); text-decoration: none; border-bottom: 1px solid var(--rule); }
     footer a:hover { color: var(--madder); border-bottom-color: var(--madder); }
+    footer .principal { color: var(--ink); }
+    footer nav {
+      margin-top: 1.2rem;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
     @media (max-width: 640px) {
-      body { padding: 4rem 1.5rem 3rem; font-size: 19px; }
-      h1 { font-size: 1.7rem; }
-      pre { font-size: 0.7rem; }
+      body { padding: 3.5rem 1.4rem 4rem; font-size: 19px; }
+      h1 { font-size: 1.55rem; }
+      pre.ascii { font-size: 0.68rem; padding: 1rem; }
+      .tier-head { flex-direction: column; gap: 0.2rem; }
+      .cta { padding: 2rem 1.2rem; }
+      .cta-actions { flex-direction: column; }
+      .cta-button { display: block; }
     }
   </style>
 </head>
 <body>
+
   <div class="breadcrumb">
     <a href="/">◆ Sovereign Recursion</a> &middot; Architecture
   </div>
 
-  <h1>Architecture</h1>
-  <p class="subtitle">How the principle is rendered into systems &mdash; and into engagements.</p>
+  <h1>Architecture &amp; engagements</h1>
+  <p class="subtitle">How the principle is rendered into systems &mdash; and the rooms in which the work happens.</p>
 
   <h2>The layered model</h2>
-  <p>Sovereign-recursive systems are constructed in five layers, each with its own invariants. The lower layers are sovereign over the upper; mutation flows from the top, but the lower layers retain veto.</p>
 
-  <pre>
-  ┌──────────────────────────────────────────────────────────┐
-  │  L5 &mdash; Continual evaluation                                │
-  │       Capability evals, operator evals, regression suite │
-  ├──────────────────────────────────────────────────────────┤
-  │  L4 &mdash; Gating, rollback, jurisdictional firewall          │
-  │       Apply-then-evaluate. Mutation has no write access  │
-  │       to L1, L2, or L5.                                  │
-  ├──────────────────────────────────────────────────────────┤
-  │  L3 &mdash; Mutation operators                                  │
-  │       Prompt, tool description, sub-agent topology       │
-  ├──────────────────────────────────────────────────────────┤
-  │  L2 &mdash; Self-observation and trace                          │
-  │       Append-only. Immune to L3.                         │
-  ├──────────────────────────────────────────────────────────┤
-  │  L1 &mdash; Kernel control loop                                 │
-  │       Async tick. Framework-agnostic. Sovereign.         │
-  └──────────────────────────────────────────────────────────┘</pre>
+  <p>Sovereign-recursive systems are constructed in five layers, each with its own invariants. Mutation flows from the top; the lower layers are sovereign over the upper. L4 holds the gate. L5 holds the eval. Neither is reachable from L3.</p>
+
+<pre class="ascii">┌──────────────────────────────────────────────────────────┐
+│  L5 — Continual evaluation                                │
+│       Capability evals, operator evals, regression suite  │
+├──────────────────────────────────────────────────────────┤
+│  L4 — Gating, rollback, jurisdictional firewall           │
+│       Apply-then-evaluate. Mutation has no write access   │
+│       to L1, L2, or L5.                                   │
+├──────────────────────────────────────────────────────────┤
+│  L3 — Mutation operators                                  │
+│       Prompt, tool description, sub-agent topology        │
+├──────────────────────────────────────────────────────────┤
+│  L2 — Self-observation and trace                          │
+│       Append-only. Immune to L3.                          │
+├──────────────────────────────────────────────────────────┤
+│  L1 — Kernel control loop                                 │
+│       Async tick. Framework-agnostic. Sovereign.          │
+└──────────────────────────────────────────────────────────┘</pre>
+
+  <p>The full anchor essay walks through each layer with working code: <a class="inline" href="/essays/sovereign-recursion-jurisdictional-firewall/">Sovereign Recursion: Why Your Self-Improving Agent Needs a Jurisdictional Firewall →</a></p>
 
   <div class="invariant">
-    Each recursive call must increase independence. A loop that grows more dependent is not improvement &mdash; it is capture.
+    Each recursive call must increase independence. A loop that grows more dependent is not improvement &mdash; <strong>it is capture.</strong>
   </div>
 
-  <h2>Engagement patterns</h2>
-  <p>Forthcoming. The patterns through which sovereign-recursive architecture is brought into existing organizations &mdash; bespoke builds, advisory retainers, and fixed-scope architectural reviews. Detailed pricing and shape on this page after the first essays publish.</p>
+  <h2>Engagement tiers</h2>
 
-  <div class="pattern">
-    <h3>Bespoke architecture engagement</h3>
-    <p class="meta">Forthcoming &middot; ≈ 8&ndash;16 weeks &middot; fixed scope</p>
-    <p>End-to-end design and delivery of a sovereign-recursive system for an organization deploying agents in production. The deliverable is the running stack, not a deck.</p>
+  <p>Four ways to bring this architecture into an organization. Each tier is fixed-scope, fixed-price, and operator-led. Engagements are direct with Justin Oberg as principal &mdash; not handed to junior staff after sale.</p>
+
+  <div class="tiers">
+
+    <div class="tier">
+      <div class="tier-head">
+        <h3>Architecture review</h3>
+        <div class="price">$7,500 &middot; 90&thinsp;min &middot; written report</div>
+      </div>
+      <p>A deep, structured review of your existing agent stack against the L1&ndash;L5 model and the jurisdictional-firewall principle. The deliverable is a written report &mdash; capability gaps, layer violations, the three highest-leverage changes you could make this quarter, and an honest assessment of whether further engagement is the right next step.</p>
+      <p>The lead surface for engagements. Most teams who later commission a build start here.</p>
+    </div>
+
+    <div class="tier">
+      <div class="tier-head">
+        <h3>Focused engagement</h3>
+        <div class="price">$25,000&ndash;$50,000 &middot; 4&ndash;8 weeks</div>
+      </div>
+      <p>End-to-end delivery of one specific architectural piece. Common shapes:</p>
+      <ul>
+        <li>L4 gating layer for an existing agent stack</li>
+        <li>Jurisdictional firewall design + policy authoring for a regulated environment</li>
+        <li>L5 operator-evals harness with cost / latency / refusal-rate fixtures</li>
+        <li>Migration of an existing single-LLM-call system to a recursive agent</li>
+      </ul>
+      <p>Fixed-scope, fixed-price, fully remote with one optional in-person workshop. Working code shipped at the end.</p>
+    </div>
+
+    <div class="tier">
+      <div class="tier-head">
+        <h3>Full architecture engagement</h3>
+        <div class="price">$75,000&ndash;$150,000 &middot; 8&ndash;16 weeks</div>
+      </div>
+      <p>Bespoke design and delivery of a complete L1&ndash;L5 sovereign-recursive system for a team deploying agents in production. The deliverable is the running stack &mdash; not a deck. Includes:</p>
+      <ul>
+        <li>Reference repository tailored to your environment</li>
+        <li>Firewall policy authored against your specific risk surface</li>
+        <li>Eval harness wired to your data and your operator-metrics</li>
+        <li>Documentation and methodology transfer to your internal team</li>
+        <li>One in-person workshop in your offices; otherwise remote</li>
+      </ul>
+      <p>The codebase and the data are yours. The system is maintainable by your engineers after delivery. Three to four of these per year.</p>
+    </div>
+
+    <div class="tier">
+      <div class="tier-head">
+        <h3>Quarterly architect retainer</h3>
+        <div class="price">$12,000 / quarter &middot; capped at 6 seats</div>
+      </div>
+      <p>Ongoing architectural advisory for engineering teams already running recursive agents. Async by default. Includes:</p>
+      <ul>
+        <li>Monthly two-hour architecture office hours, scheduled</li>
+        <li>Async correspondence on architectural decisions, ~5 hours/month</li>
+        <li>Review of architectural changes against the layered model</li>
+        <li>One on-site day per quarter, optional</li>
+      </ul>
+      <p>For teams who have shipped past the build phase and need ongoing judgment, not a fresh build. No on-call. No SLA. Six seats, total.</p>
+    </div>
+
   </div>
 
-  <div class="pattern">
-    <h3>Quarterly architect retainer</h3>
-    <p class="meta">Forthcoming &middot; capped engagement count</p>
-    <p>Ongoing architectural advisory for engineering teams already shipping recursive agents. Async by default; one in-person workshop per quarter; no on-call.</p>
+  <h2>How an engagement begins</h2>
+
+  <ol class="process">
+    <li>
+      <strong>Diagnostic correspondence or call</strong>
+      <p>A 30-minute conversation, free, by appointment. Two purposes: confirm the architecture is the right answer to your problem, and confirm we can actually work together. Some firms walk away knowing they don't need this yet &mdash; that is a fine outcome.</p>
+    </li>
+    <li>
+      <strong>Scope and proposal</strong>
+      <p>If we proceed: a one-page written proposal with deliverables, timeline, and price. Fixed-scope. Fixed-price. No hourly billing for build work.</p>
+    </li>
+    <li>
+      <strong>Engagement</strong>
+      <p>Remote by default with one or two in-person workshops at your offices. Weekly written progress updates. Working artifacts shared as they ship.</p>
+    </li>
+    <li>
+      <strong>Delivery and transfer</strong>
+      <p>The deliverable is a working system, not a deck. Documentation and methodology transfer to your internal team. The codebase and the data are yours.</p>
+    </li>
+  </ol>
+
+  <div class="cta">
+    <p class="cta-lede">If the architecture is the right answer to a problem you're carrying, the conversation is worth having.</p>
+    <div class="cta-actions">
+      <a class="cta-button" href="https://cal.com/justinoberg/diagnostic" target="_blank" rel="noopener">Book a 30&ndash;min diagnostic</a>
+      <a class="cta-button secondary" href="mailto:justin@sovereignrecursion.com?subject=Sovereign%20Recursion%20engagement">Or write directly</a>
+    </div>
+    <p class="cta-note">No deck. No follow-up automation. No pitch.</p>
   </div>
 
-  <div class="pattern">
-    <h3>Architecture review</h3>
-    <p class="meta">Forthcoming &middot; ≈ 90 minutes &middot; written report</p>
-    <p>A deep examination of an existing agent stack against the layered model and the jurisdictional-firewall principle. Lead surface for engagements.</p>
+  <h2>Frequent questions</h2>
+
+  <div class="faq-item">
+    <h3>What kinds of organizations do you take engagements with?</h3>
+    <p>Engineering teams shipping recursive AI agents in production at growing organizations &mdash; defense-aligned, federally-funded research, mid-stage software companies, and mid-size firms whose agent deployments have reached a scale where ad-hoc gating is no longer sufficient. I do not take engagements with companies whose AI deployment is primarily content-generation, marketing automation, or consumer chatbot work.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Can you sign an NDA? Operate in a classified or regulated environment?</h3>
+    <p>Yes to NDAs. Yes to regulated environments (HIPAA-aware, financial, controlled-unclassified information). Classified work specifically requires a separate conversation about clearance scope and may route through a different vehicle. Federal-aerospace background; familiar territory.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How soon can an engagement start?</h3>
+    <p>Architecture reviews: typically within two weeks of proposal acceptance. Focused engagements: 2&ndash;6 weeks lead time. Full engagements: 4&ndash;10 weeks lead time, depending on calendar. Three to four full engagements per year is the realistic ceiling.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>What if the diagnostic conversation makes it clear we shouldn't work together?</h3>
+    <p>Then we don't, and the conversation ends amicably. The diagnostic exists specifically to surface that &mdash; misfit engagements are bad for both parties. If a different practice would be a better fit for your situation, I will say so.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Is there a course, cohort, or self-paced product?</h3>
+    <p>Possibly later. The current focus is principal-led engagements. The essays remain free and continue to publish on a slow cadence.</p>
   </div>
 
   <footer>
-    <a href="/">Return to the principle</a>
-    &nbsp; &middot; &nbsp;
-    <a href="mailto:justin@sovereignrecursion.com?subject=Sovereign%20Recursion%20engagement">Correspond on engagements</a>
+    <div class="principal">Justin Paul Oberg &middot; Principal</div>
+    <div>Vancouver, Cascadia &middot; MMXXVI</div>
+    <nav>
+      <a href="/">The principle</a>
+      <a href="/essays/">Essays</a>
+      <a href="https://github.com/pondata/sovereignrecursion">Source</a>
+      <a href="mailto:justin@sovereignrecursion.com">Correspond</a>
+    </nav>
   </footer>
+
 </body>
 </html>
