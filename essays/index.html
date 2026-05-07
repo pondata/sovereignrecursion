@@ -144,12 +144,49 @@
 
   <div style="margin-top: 4rem; padding: 2rem 1.6rem; background: rgba(200,152,96,0.05); border: 1px solid var(--rule);">
     <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--ink); font-size: 1.1rem; margin-bottom: 1rem; line-height: 1.5;">Notified when the next essay publishes.</p>
-    <form action="https://formspree.io/f/REPLACE_WITH_YOUR_FORMSPREE_ID" method="post" style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
-      <input type="email" name="email" placeholder="you@elsewhere" required autocomplete="email" style="flex: 1; min-width: 200px; padding: 0.7rem 0.9rem; background: var(--paper); border: 1px solid var(--rule); color: var(--ink); font-family: 'Cormorant Garamond', serif; font-size: 1rem;">
-      <button type="submit" style="padding: 0.7rem 1.4rem; background: var(--ink); color: var(--paper); border: 1px solid var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;">Notify</button>
+    <form id="waitlistForm" style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+      <input type="email" name="email" id="waitlistEmail" placeholder="you@elsewhere" required autocomplete="email" style="flex: 1; min-width: 200px; padding: 0.7rem 0.9rem; background: var(--paper); border: 1px solid var(--rule); color: var(--ink); font-family: 'Cormorant Garamond', serif; font-size: 1rem;">
+      <button type="submit" id="waitlistBtn" style="padding: 0.7rem 1.4rem; background: var(--ink); color: var(--paper); border: 1px solid var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;">Notify</button>
+      <label for="waitlistHoneypot" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">Leave this field empty</label>
+      <input type="text" name="website" id="waitlistHoneypot" tabindex="-1" autocomplete="off" value="" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
     </form>
+    <p id="waitlistStatus" style="font-size: 0.95rem; color: var(--madder); margin-top: 0.8rem; margin-bottom: 0; font-style: italic; display: none;"></p>
     <p style="font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.8rem; margin-bottom: 0; font-style: italic;">One email per essay. Roughly every 14 days. No other sends.</p>
   </div>
+
+  <script>
+  document.getElementById('waitlistForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var btn = document.getElementById('waitlistBtn');
+    var status = document.getElementById('waitlistStatus');
+    if (document.getElementById('waitlistHoneypot').value) {
+      status.textContent = '✓ on the list.';
+      status.style.color = 'var(--ink-soft)';
+      status.style.display = 'block';
+      document.getElementById('waitlistForm').reset();
+      return;
+    }
+    btn.textContent = 'Sending…'; btn.disabled = true; status.style.display = 'none';
+    var fd = new FormData();
+    fd.append('Email', document.getElementById('waitlistEmail').value);
+    fd.append('Source', 'sovereignrecursion_essays_waitlist');
+    fd.append('Form', 'waitlist');
+    fetch('https://script.google.com/macros/s/AKfycbx-ObsqmyFUYUeFsQjVri4lt42scvHeztXXDU43PCxDbnLeuc1RLZEhW1ME21V2YBUXCQ/exec', {
+      method: 'POST', mode: 'no-cors', body: fd
+    }).then(function(){
+      status.textContent = '✓ on the list. One email per essay.';
+      status.style.color = 'var(--ink)';
+      status.style.display = 'block';
+      document.getElementById('waitlistForm').reset();
+      btn.textContent = 'Notify'; btn.disabled = false;
+    }).catch(function(){
+      status.textContent = 'Something went wrong. Write directly: justin@sovereignrecursion.com';
+      status.style.color = 'var(--madder)';
+      status.style.display = 'block';
+      btn.textContent = 'Notify'; btn.disabled = false;
+    });
+  });
+  </script>
 
   <footer>
     <a href="/">Return to the principle</a>
