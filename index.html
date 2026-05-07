@@ -3,231 +3,261 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sovereign Recursion — AI knowledge architecture for organizations that own their data</title>
-  <meta name="description" content="Boutique AI knowledge-architecture practice. Local-first knowledge graphs for law firms, family offices, research institutions, and federally-aligned organizations. Principal: Justin Oberg.">
-  <meta property="og:title" content="Sovereign Recursion — AI knowledge architecture">
-  <meta property="og:description" content="Local-first knowledge graphs for institutions that own their data.">
+  <title>Sovereign Recursion — A Principle, Stated</title>
+  <meta name="description" content="A principle for self-modifying systems, articulated in the early AI epoch: each recursive call must increase independence. Else it is capture, not improvement.">
+  <meta property="og:title" content="Sovereign Recursion">
+  <meta property="og:description" content="Each recursive call must increase independence. Else it is capture.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://sovereignrecursion.com/">
-  <link rel="canonical" href="https://sovereignrecursion.com/">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0a'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='%23e5e7eb' font-family='Georgia,serif' font-size='20' font-weight='700'%3ES%3C/text%3E%3C/svg%3E">
+  <meta property="og:url" content="https://sovereignrecursion.com">
+  <meta property="og:locale" content="en">
+  <meta property="article:published_time" content="2026-05-07T00:00:00Z">
+  <meta property="article:author" content="Justin Paul Oberg">
+  <link rel="canonical" href="https://sovereignrecursion.com">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f5efe2'/%3E%3Cpath d='M16 7 L23 16 L16 25 L9 16 Z' fill='none' stroke='%231a1410' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%238b3a1c'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --ink: #0a0a0a;
-      --paper: #fafaf7;
-      --muted: #6b7280;
-      --rule: #d4d4d0;
-      --accent: #1f2937;
-      --highlight: #b45309;
+      --paper: #f5efe2;
+      --paper-edge: #ebe2d0;
+      --ink: #1a1410;
+      --ink-mid: #4a3f33;
+      --ink-soft: #7a6e5e;
+      --rule: #c8bea7;
+      --madder: #8b3a1c;
+      --measure: 32rem;
     }
-    html { scroll-behavior: smooth; }
+    html { background: var(--paper-edge); }
     body {
-      font-family: 'Source Serif 4', Georgia, serif;
       background: var(--paper);
       color: var(--ink);
+      font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, 'Times New Roman', serif;
+      font-size: 21px;
+      font-weight: 400;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      font-size: 18px;
-    }
-    .container { max-width: 720px; margin: 0 auto; padding: 4rem 2rem; }
-    header {
-      padding: 4rem 2rem 0;
-      max-width: 720px;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      max-width: 56rem;
       margin: 0 auto;
+      padding: 6rem 2.5rem 5rem;
+      min-height: 100vh;
     }
-    .brand {
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      color: var(--ink);
+    .ornament {
+      text-align: center;
+      color: var(--madder);
+      font-size: 1.2rem;
+      letter-spacing: 0.5em;
+      margin-bottom: 4rem;
+      user-select: none;
+    }
+    h1.title {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(1.4rem, 2.6vw, 1.7rem);
+      letter-spacing: 0.46em;
+      text-indent: 0.46em;
       text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 0.6rem;
     }
-    .brand-mark {
-      display: inline-block;
-      width: 0.6em;
-      height: 0.6em;
-      background: var(--highlight);
-      margin-right: 0.4em;
-      transform: rotate(45deg);
-      vertical-align: middle;
+    .epigraph {
+      text-align: center;
+      font-style: italic;
+      color: var(--ink-soft);
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 5rem;
     }
-    h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 700;
-      line-height: 1.1;
-      margin: 3rem 0 1.5rem;
-      letter-spacing: -0.02em;
+    .principle {
+      max-width: var(--measure);
+      margin: 0 auto 4rem;
+      padding: 2.5rem 0;
+      border-top: 0.5px solid var(--rule);
+      border-bottom: 0.5px solid var(--rule);
+      text-align: center;
+    }
+    .principle p {
+      font-size: clamp(1.5rem, 3vw, 1.95rem);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--ink);
+      letter-spacing: -0.005em;
+      margin-bottom: 1.5rem;
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle .em { font-style: italic; }
+    .principle .punch {
+      color: var(--madder);
+      font-style: italic;
+      font-weight: 500;
     }
     h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 3rem 0 1rem;
-      letter-spacing: -0.01em;
-    }
-    h3 {
-      font-size: 1.15rem;
-      font-weight: 600;
-      margin: 2rem 0 0.5rem;
-    }
-    p { margin-bottom: 1.25rem; }
-    .lede {
-      font-size: 1.25rem;
-      line-height: 1.5;
-      color: var(--accent);
+      font-family: 'Cormorant Garamond', serif;
       font-weight: 400;
-      margin-bottom: 2rem;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: var(--ink-mid);
+      text-align: center;
+      margin: 4rem 0 1.5rem;
     }
-    .rule {
-      border: none;
-      border-top: 1px solid var(--rule);
-      margin: 4rem 0;
+    .applications, .lineage {
+      max-width: var(--measure);
+      margin: 0 auto 3rem;
+      list-style: none;
     }
-    a {
+    .applications li, .lineage li {
+      padding: 0.55rem 0;
+      font-size: 1.1rem;
+      color: var(--ink-mid);
+      text-align: center;
+      font-style: italic;
+    }
+    .lineage li { color: var(--ink-soft); }
+    .lineage li .citation {
+      font-style: normal;
       color: var(--ink);
-      text-decoration: underline;
-      text-decoration-color: var(--highlight);
-      text-decoration-thickness: 2px;
-      text-underline-offset: 3px;
-      transition: text-decoration-color 0.15s;
     }
-    a:hover { text-decoration-color: var(--ink); }
-    .meta {
-      font-size: 0.95rem;
-      color: var(--muted);
+    .lineage li .citation::before { content: "— "; color: var(--ink-soft); }
+    .vrule {
+      width: 1px;
+      height: 56px;
+      background: var(--rule);
+      margin: 4rem auto;
     }
-    code, .mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85em;
-      background: rgba(0,0,0,0.04);
-      padding: 0.1em 0.35em;
-      border-radius: 3px;
+    .gloss {
+      max-width: var(--measure);
+      margin: 0 auto 4rem;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      text-align: center;
     }
-    .pattern-grid {
-      display: grid;
-      gap: 1.25rem;
-      margin: 1.5rem 0 2rem;
-    }
-    .pattern {
-      border-left: 3px solid var(--highlight);
-      padding-left: 1.25rem;
-    }
-    .pattern h3 { margin: 0 0 0.4rem; }
-    .pattern p { margin-bottom: 0.5rem; font-size: 1rem; }
-    .pattern .price { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--muted); }
-    .cta {
-      background: var(--ink);
-      color: var(--paper);
-      padding: 2rem;
-      margin: 3rem 0;
-      border-radius: 4px;
-    }
-    .cta h2 { color: var(--paper); margin-top: 0; }
-    .cta p { color: #d4d4d0; }
-    .cta a { color: var(--paper); text-decoration-color: var(--highlight); }
-    .cta-button {
-      display: inline-block;
-      background: var(--highlight);
-      color: var(--paper) !important;
-      padding: 0.75rem 1.5rem;
-      text-decoration: none !important;
-      font-weight: 600;
-      font-size: 1rem;
-      margin-top: 0.75rem;
-      border-radius: 2px;
-    }
-    footer {
-      max-width: 720px;
+    .gloss p { margin-bottom: 1rem; }
+    .gloss em { color: var(--ink); }
+    .gloss p:last-child { margin-bottom: 0; }
+    .colophon {
+      max-width: var(--measure);
       margin: 0 auto;
-      padding: 2rem;
-      font-size: 0.85rem;
-      color: var(--muted);
-      border-top: 1px solid var(--rule);
+      text-align: center;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      line-height: 2.2;
+      padding-top: 3rem;
+      border-top: 0.5px solid var(--rule);
     }
-    footer p { margin: 0; }
+    .colophon .principal {
+      color: var(--ink);
+      font-weight: 400;
+    }
+    .colophon a {
+      color: var(--ink-mid);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .colophon a:hover {
+      color: var(--madder);
+      border-bottom-color: var(--madder);
+    }
+    .colophon .surfaces {
+      margin-top: 1.2rem;
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .corner {
+      position: fixed;
+      bottom: 1.2rem;
+      left: 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      color: var(--ink-soft);
+      opacity: 0.5;
+      text-transform: uppercase;
+    }
+    @media (max-width: 640px) {
+      body { padding: 4rem 1.5rem 3rem; font-size: 19px; }
+      h1.title { letter-spacing: 0.3em; text-indent: 0.3em; }
+      .ornament { letter-spacing: 0.32em; margin-bottom: 3rem; }
+      .epigraph { font-size: 1rem; margin-bottom: 3.5rem; }
+      .principle { padding: 2rem 0; margin-bottom: 3rem; }
+      .principle p { font-size: 1.4rem; }
+      .applications li, .lineage li { font-size: 1rem; }
+      .vrule { margin: 3rem auto; height: 44px; }
+      .colophon .surfaces { gap: 1.4rem; }
+      .corner { display: none; }
+    }
+    @media print {
+      body { background: white; color: black; max-width: 6.5in; padding: 1in; }
+      .corner { display: none; }
+      .colophon a { color: black; border-bottom: 1px solid black; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="brand"><span class="brand-mark"></span>Sovereign Recursion</div>
-</header>
+  <div class="ornament" aria-hidden="true">◆ &nbsp; · &nbsp; ◆</div>
 
-<div class="container">
+  <h1 class="title">Sovereign Recursion</h1>
+  <p class="epigraph">A principle, stated.</p>
 
-  <h1>AI knowledge architecture for organizations that own their data.</h1>
+  <section class="principle" aria-label="The principle">
+    <p>Each recursive call <span class="em">must</span> increase independence.</p>
+    <p>A loop that grows more dependent is not improvement.</p>
+    <p><span class="punch">It is capture.</span></p>
+  </section>
 
-  <p class="lede">A boutique practice building local-first knowledge graphs for law firms, family offices, research institutions, and federally-aligned organizations. Four to six engagements per year. Principal: Justin Oberg.</p>
+  <h2>What it concerns</h2>
+  <ul class="applications">
+    <li>agents that modify their own prompts</li>
+    <li>organizations that reform their own constitutions</li>
+    <li>persons that practice self-improvement</li>
+    <li>polities that govern their own governance</li>
+    <li>any system that contains its own image</li>
+  </ul>
 
-  <hr class="rule">
+  <h2>What it resonates with</h2>
+  <ul class="lineage">
+    <li>flux that is its own measure <span class="citation">Heraclitus, fragments</span></li>
+    <li>the dominion of the inner over the outer <span class="citation">Epictetus, <em>Enchiridion</em></span></li>
+    <li>strange loops and self-reference <span class="citation">Hofstadter, <em>Gödel, Escher, Bach</em></span></li>
+    <li>cybernetic governance and feedback <span class="citation">Wiener, <em>The Human Use of Human Beings</em></span></li>
+    <li>subsidiarity, jurisdiction, and the right scale of authority <span class="citation">Catholic social teaching, federalist tradition</span></li>
+    <li>local-first computation against the captured cloud <span class="citation">Kleppmann et al., <em>Local-First Software</em></span></li>
+  </ul>
 
-  <h2>The problem</h2>
+  <div class="vrule" aria-hidden="true"></div>
 
-  <p>Every knowledge-driven organization has the same accumulating crisis. Decades of email, conversation transcripts, partner notes, deal histories, technical decisions, client memos, and internal documents sit across dozens of systems, and not one of them is searchable in a way that returns useful results. Senior people retire and their accumulated judgment leaves the building. The CIO is asked at every board meeting <em>"what's our AI strategy"</em> and there is no good answer because the layer underneath — structured access to the firm's institutional knowledge — does not exist.</p>
-
-  <p>Most "AI strategy" pitches landing in your inbox right now are slideware. Vendors are selling the future tense. What's missing is anyone showing you a working reference implementation and saying <em>"here's an architecture that already works, here's what it would look like applied to your domain, here's the cost and timeline."</em></p>
-
-  <h2>The reference implementation</h2>
-
-  <p>A working personal AI knowledge graph called Codex Vivus, built over the last eighteen months. It indexes 4,948 conversations totaling 37.7 million words. Local-first (SQLite + FTS5). Full-text search returning ranked results in under 100&nbsp;ms across the entire corpus. Tier-scoring. Topic clustering. Lint analysis for unresolved threads. A writeback layer that generates topic summaries.</p>
-
-  <p>It runs on a laptop. Has been running for over a year. The detailed case study, including architecture and lessons, is here: <a href="/case-studies/codex-vivus.html">Codex Vivus: a working reference architecture for organizational AI knowledge</a>.</p>
-
-  <p>Codex Vivus is personal infrastructure, not a product. The architectural pattern it embodies is what's offered as a service.</p>
-
-  <h2>Engagement patterns</h2>
-
-  <div class="pattern-grid">
-    <div class="pattern">
-      <h3>Pattern A &mdash; The departing-partner archive</h3>
-      <p>Mid-size law firms and professional-services firms where senior partners are within five years of retirement. Their accumulated client knowledge, judgment, and unresolved questions live in their email and their head. The deliverable: a knowledge graph that ingests the partner's archive (with consent and matter-level scoping), structured exit interviews, and engagement memos &mdash; producing a queryable institutional artifact that survives the partner's departure.</p>
-      <p class="price">$75k&ndash;$150k &middot; 8&ndash;12 weeks</p>
-    </div>
-
-    <div class="pattern">
-      <h3>Pattern B &mdash; The deal-history graph</h3>
-      <p>Family offices and venture firms with 10&ndash;30 years of deal flow, partner introductions, due-diligence memos, and portfolio-company notes. The deliverable: an indexed graph that can answer <em>"have we ever looked at a company like this before"</em>, <em>"who introduced us to X"</em>, and <em>"what did our analysis say about industry Y in 2017"</em>.</p>
-      <p class="price">$100k&ndash;$200k &middot; 12&ndash;16 weeks</p>
-    </div>
-
-    <div class="pattern">
-      <h3>Pattern C &mdash; The technical archive</h3>
-      <p>Architecture/engineering firms, defense contractors, and research-driven organizations with decades of technical documents, project artifacts, and design rationale. The deliverable: a structured graph layered onto the existing document store, with retention rules, classification handling, and integration with the firm's existing security perimeter.</p>
-      <p class="price">$100k&ndash;$300k &middot; 12&ndash;16 weeks</p>
-    </div>
-
-    <div class="pattern">
-      <h3>Pattern D &mdash; The fractional knowledge officer</h3>
-      <p>Smaller engagement: an organization that's been pitched AI strategy a hundred times and wants someone with a working reference architecture to spend two days a month with their leadership team &mdash; diagnosing where institutional knowledge is leaking, prototyping fixes, and assessing AI-vendor pitches.</p>
-      <p class="price">$5k&ndash;$10k/month &middot; ongoing</p>
-    </div>
+  <div class="gloss">
+    <p><em>Self-reference without sovereignty stagnates.</em><br>
+    <em>Sovereignty without self-reference brittles.</em><br>
+    Their marriage is the only stable architecture<br>
+    for intelligence at scale.</p>
+    <p style="margin-top: 1.5rem;">A loop that captures its operator has not improved itself.<br>It has acquired the operator.</p>
   </div>
 
-  <h2>How engagements work</h2>
+  <footer class="colophon">
+    <div class="principal">Justin Paul Oberg</div>
+    <div>Inscribed in Vancouver, Cascadia &middot; <span title="2026">MMXXVI</span></div>
+    <nav class="surfaces" aria-label="Body of work">
+      <a href="/essays/">Essays</a>
+      <a href="/architecture/">Architecture</a>
+      <a href="https://github.com/pondata/sovereignrecursion">Source</a>
+      <a href="mailto:justin@sovereignrecursion.com">Correspond</a>
+    </nav>
+  </footer>
 
-  <p>Fixed-scope, fixed-price. No hourly billing for build work. The deliverable is a working system, not a deck. Remote by default with one or two in-person workshops during the engagement. The codebase and the data are yours. The schema and methodology are documented. The system is maintainable by your internal team after delivery.</p>
-
-  <p>Local-first architecture: your data stays on your hardware, the schema is yours, no cloud dependencies for core capability. SaaS vendors and LLM APIs become tools called by the system, not platforms it depends on.</p>
-
-  <h2>Principal</h2>
-
-  <p>Justin Oberg. Background in federal-aerospace systems work and commercial logistics integration. Pacific Northwest based. Solo operator by design &mdash; engagements are direct, not handed to junior staff after sale. Four to six engagements per year is the realistic ceiling.</p>
-
-  <div class="cta">
-    <h2>Diagnostic conversation</h2>
-    <p>If you're a managing partner, CIO, or COO at an organization where the question of <em>"what should our AI strategy actually be"</em> has surfaced more than once &mdash; and the underneath layer (structured access to your accumulated knowledge) doesn't yet exist &mdash; a 30-minute diagnostic conversation is worth the time. No deck, no pitch, no follow-up automation.</p>
-    <a class="cta-button" href="mailto:justin@sovereignrecursion.com?subject=Knowledge%20graph%20diagnostic">justin@sovereignrecursion.com</a>
-  </div>
-
-</div>
-
-<footer>
-  <p>Sovereign Recursion &middot; Vancouver, WA &middot; Justin Oberg, principal</p>
-</footer>
+  <div class="corner" aria-hidden="true">sovereignrecursion.com · MMXXVI</div>
 
 </body>
 </html>
