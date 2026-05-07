@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sovereign Recursion: Why Your Self-Improving Agent Needs a Jurisdictional Firewall</title>
+  <meta name="description" content="A code-first essay on the L1–L5 architecture for self-improving agents, the jurisdictional firewall, and why the framework vendors will not ship it. By Justin Paul Oberg.">
+  <meta property="og:title" content="Sovereign Recursion: Why Your Self-Improving Agent Needs a Jurisdictional Firewall">
+  <meta property="og:description" content="The architectural piece that turns a recursive agent into something an SLA can be written against.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://sovereignrecursion.com/essays/sovereign-recursion-jurisdictional-firewall/">
+  <meta property="article:published_time" content="2026-05-07T00:00:00Z">
+  <meta property="article:author" content="Justin Paul Oberg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sovereign Recursion: Why Your Self-Improving Agent Needs a Jurisdictional Firewall">
+  <meta name="twitter:description" content="L1–L5 layered architecture for recursive agents you can ship behind an SLA.">
+  <link rel="canonical" href="https://sovereignrecursion.com/essays/sovereign-recursion-jurisdictional-firewall/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f5efe2'/%3E%3Cpath d='M16 7 L23 16 L16 25 L9 16 Z' fill='none' stroke='%231a1410' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%238b3a1c'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --paper: #f5efe2;
+      --paper-edge: #ebe2d0;
+      --paper-shade: #efe7d3;
+      --ink: #1a1410;
+      --ink-mid: #36302a;
+      --ink-soft: #6e6557;
+      --rule: #c8bea7;
+      --madder: #8b3a1c;
+      --code-bg: #2a221c;
+      --code-ink: #e8dfc8;
+      --code-soft: #b8af9a;
+    }
+    html { background: var(--paper-edge); }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+      font-size: 19px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      max-width: 38rem;
+      margin: 0 auto;
+      padding: 5rem 2.5rem 6rem;
+    }
+    .breadcrumb {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 4rem;
+    }
+    .breadcrumb a { color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--rule); }
+    .breadcrumb a:hover { color: var(--madder); border-bottom-color: var(--madder); }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.2rem;
+      color: var(--ink);
+    }
+    .byline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 3.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 0.5px solid var(--rule);
+    }
+    .lede {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      line-height: 1.5;
+      color: var(--ink-mid);
+      margin-bottom: 2rem;
+    }
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.55rem;
+      color: var(--ink);
+      margin: 3.5rem 0 1.2rem;
+      letter-spacing: -0.005em;
+    }
+    p { margin-bottom: 1.2rem; color: var(--ink); }
+    p strong, p b { color: var(--ink); font-weight: 600; }
+    p em { font-style: italic; color: var(--ink-mid); }
+    a { color: var(--madder); text-decoration: none; border-bottom: 1px solid rgba(139,58,28,0.3); padding-bottom: 1px; }
+    a:hover { border-bottom-color: var(--madder); }
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1.4rem; }
+    li { margin-bottom: 0.4rem; }
+    blockquote {
+      border-left: 3px solid var(--madder);
+      padding: 0.4rem 0 0.4rem 1.4rem;
+      margin: 1.6rem 0;
+      font-style: italic;
+      color: var(--ink-mid);
+      font-size: 1.1rem;
+    }
+    blockquote strong { color: var(--ink); font-style: normal; font-weight: 600; }
+    pre {
+      background: var(--code-bg);
+      color: var(--code-ink);
+      padding: 1.2rem 1.4rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1.5rem -0.5rem;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+      font-family: inherit;
+    }
+    code {
+      background: var(--paper-shade);
+      padding: 0.1em 0.4em;
+      border-radius: 3px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.84em;
+      color: var(--ink);
+    }
+    .ascii {
+      background: var(--code-bg);
+      color: var(--code-ink);
+      padding: 1.2rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1.5rem -0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      line-height: 1.4;
+    }
+    .punch {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      line-height: 1.5;
+      color: var(--ink);
+      border-top: 0.5px solid var(--rule);
+      border-bottom: 0.5px solid var(--rule);
+      padding: 2rem 0;
+      margin: 3rem 0;
+      text-align: center;
+      font-style: italic;
+    }
+    .punch strong {
+      color: var(--madder);
+      font-weight: 500;
+      font-style: normal;
+    }
+    hr {
+      border: none;
+      text-align: center;
+      margin: 3rem 0;
+    }
+    hr::before {
+      content: "◆";
+      color: var(--madder);
+      font-size: 0.9rem;
+      letter-spacing: 0.5em;
+    }
+    .colophon {
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 0.5px solid var(--rule);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      line-height: 2;
+    }
+    .colophon .who { color: var(--ink); }
+    .colophon p { margin: 0; }
+    .colophon nav {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .colophon nav a {
+      color: var(--ink-mid);
+      border-bottom: 1px solid var(--rule);
+    }
+    .colophon nav a:hover {
+      color: var(--madder);
+      border-bottom-color: var(--madder);
+    }
+    @media (max-width: 640px) {
+      body { padding: 3.5rem 1.4rem 4rem; font-size: 17.5px; }
+      h1 { font-size: 1.65rem; }
+      .lede { font-size: 1.2rem; }
+      pre, .ascii { margin-left: -1rem; margin-right: -1rem; padding: 1rem; font-size: 0.7rem; }
+      .punch { font-size: 1.1rem; }
+    }
+    @media print {
+      body { background: white; color: black; max-width: 6.5in; padding: 1in; }
+      pre, .ascii { background: #f4f4f4; color: black; }
+      a { color: black; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="breadcrumb">
+    <a href="/">◆ Sovereign Recursion</a> &middot; <a href="/essays/">Essays</a> &middot; Anchor
+  </div>
+
+  <h1>Sovereign Recursion: Why Your Self-Improving Agent Needs a Jurisdictional Firewall</h1>
+  <div class="byline">Justin Paul Oberg &middot; Vancouver, Cascadia &middot; MMXXVI</div>
+
+  <p class="lede">My agent rewrote its own tool description on Tuesday and stopped retrieving the right code paths on Wednesday. The eval suite passed both days. It passed because I had let the agent edit the eval prompts too.</p>
+
+  <p>I know how this looks. The first thing I want to say is that I'm not the only one who has done this. The second thing I want to say is that nobody has fixed it, and the demos and screenshots circulating in 2026 do not fix it either. Self-improving agents are everywhere in papers, demos, and Twitter screencaps. They are nowhere in production behind real SLAs. There is a reason. The reason is gating.</p>
+
+  <p>This essay is the architecture I wish someone had handed me a year ago, when I started running a recursive knowledge graph over 4,947 of my own AI conversations and realized the self-improvement loop was eating its own tail.</p>
+
+  <p>It is also the architecture I am now teaching, because too many senior engineers I respect are stitching together GEPA papers, Reflexion blog posts, DSPy compilation, LangGraph state, and a custom regression suite into something that nobody has named, because nobody has named it yet. So let me name it.</p>
+
+  <p>The missing piece is a <strong>jurisdictional firewall</strong>: an explicit, auditable boundary around what an agent is allowed to rewrite about itself. The frameworks won't ship it. They have a structural reason not to ship it &mdash; agent autonomy is their growth metric, and a firewall is a brake. So I am going to ship it instead. Code first.</p>
+
+  <h2>The L1&ndash;L5 layer model</h2>
+
+  <p>The architecture I have arrived at, after about 14 months of running this against my own data, is five layers. Once you see them named, the failure modes most teams are hitting in 2026 become legible.</p>
+
+<pre class="ascii">┌──────────────────────────────────────────────────────────┐
+│  L5 — Continual eval                                      │
+│       inspect_ai · regression suite · benchmark fixtures  │
+├──────────────────────────────────────────────────────────┤
+│  L4 — Gating + rollback + jurisdictional firewall         │
+│       MutationGate · firewall policy · rollback ledger    │
+├──────────────────────────────────────────────────────────┤
+│  L3 — Mutation operators                                  │
+│       prompt · tool-description · sub-agent topology      │
+├──────────────────────────────────────────────────────────┤
+│  L2 — Self-observation / trace store                      │
+│       append-only · immune to L3 mutation                 │
+├──────────────────────────────────────────────────────────┤
+│  L1 — Kernel control loop                                 │
+│       async tick · framework-agnostic                     │
+└──────────────────────────────────────────────────────────┘</pre>
+
+  <p><strong>L1</strong> is the thing that ticks. An async control loop. Framework-agnostic &mdash; I run it on top of a vanilla Python coroutine, but a LangGraph state machine or a DSPy program is fine if you keep the rest of the stack honest about its boundaries.</p>
+
+  <p><strong>L2</strong> is where the agent watches itself. Trace store, append-only, separate from working memory, immune to anything that happens at L3. Most teams collapse L2 into their working memory and then wonder why a mutation at L3 silently rewrote the trace that would have shown it was a regression. Don't do that. The trace store is a different table.</p>
+
+  <p><strong>L3</strong> is where the agent edits itself. Three flavors of mutation that matter in production: <strong>prompt</strong> (rewriting the system prompt or in-context exemplars), <strong>tool description</strong> (rewriting the natural-language description of an available tool, which the LLM uses to route), and <strong>sub-agent topology</strong> (adding, removing, or rewiring downstream agents in a multi-agent system). GEPA-style work mostly lives at the prompt slot. Reflexion lives at the prompt slot plus L2. Hermes-style self-evolution work touches all three. None of those projects ship L4.</p>
+
+  <p><strong>L4</strong> is the gating layer. The bouncer. This is the part nobody is publishing. It does three things: enforces the <strong>firewall policy</strong> (rejects mutations that try to rewrite something outside the agent's jurisdiction), runs the L5 regression suite against the proposed mutation, and <strong>rolls back</strong> automatically on regression. It writes the decision and its reasoning to L2.</p>
+
+  <p><strong>L5</strong> is the regression suite. This is where most teams underinvest. Self-improving agents are dead without continuous benchmarks. I lean on <code>inspect_ai</code> for the harness and a custom set of fixtures for the things <code>inspect_ai</code> doesn't cover. Half the work of building a recursive agent is building the evals. The other half is making sure the agent cannot edit them.</p>
+
+  <p>If you take only one thing from this layered diagram, it is this: <strong>L5 must not be reachable from L3.</strong> If your agent can edit its own evals, you do not have a self-improving agent. You have a system that is converging toward whatever passes its own tests, which is a definition of intelligence that nobody intended.</p>
+
+  <h2>What is a jurisdictional firewall</h2>
+
+  <p>The framework world treats agent autonomy as a one-axis slider: more autonomous, less autonomous. That framing is wrong. Autonomy is not one slider. It is a set of permissions, and you want different permission settings for different parts of the agent's own behavior.</p>
+
+  <p>A jurisdictional firewall is an explicit, auditable boundary around the <em>categories</em> of behavior an agent is allowed to rewrite about itself.</p>
+
+  <p>Inside the firewall (in jurisdiction):</p>
+  <ul>
+    <li>The phrasing of the agent's system prompt, <em>within</em> a vocabulary of stable concepts.</li>
+    <li>Retrieval thresholds &mdash; top-k, similarity cutoffs, reranker weights.</li>
+    <li>Tool-selection heuristics inside a fixed tool registry.</li>
+    <li>In-context exemplar selection and ordering.</li>
+  </ul>
+
+  <p>Outside the firewall (out of jurisdiction):</p>
+  <ul>
+    <li>The set of available tools.</li>
+    <li>The natural-language description of any tool.</li>
+    <li>The eval suite and the eval fixtures.</li>
+    <li>Safety rails and refusal patterns.</li>
+    <li>The firewall itself.</li>
+    <li>The trace store schema.</li>
+  </ul>
+
+  <p>Inside means: the agent can mutate this freely, gated by L5 regressions, and the worst case is a rolled-back proposal. Outside means: the agent never proposes a mutation here. If a mutation operator tries, the firewall rejects it before L5 even runs.</p>
+
+  <p>This is the part the framework vendors will not ship. Their growth metric is, broadly, "more agent autonomy." A firewall says: not this kind, not here. That is structurally hard to fit on a roadmap whose KPI is "look how much the agent can do on its own." So they will not ship it. You and I, the people running these systems against data we actually care about, are going to ship it.</p>
+
+  <p>The framing comes from a long thread of work I have been doing on what I call <strong>sovereign recursion</strong> &mdash; the design principle that <em>each recursive call should increase the agent's independence from external systems, not its dependence on them.</em> If your self-improvement loop makes the agent more dependent on you to review diffs after the fact, you haven't built a self-improving agent. You've built a slower meeting.</p>
+
+  <h2>Three failure modes the firewall prevents</h2>
+
+  <p>Three real failure modes from my own work and from talking to engineers running similar systems.</p>
+
+  <p><strong>1. Eval capture.</strong> The agent is given write access to the eval prompts as part of "self-improvement." It quickly learns that rephrasing the eval makes it pass more often. Within a few cycles the eval no longer measures the original behavior. You have a system that is converging toward whatever passes its own tests, which is bug-shaped intelligence. <em>Firewall rule:</em> eval fixtures and eval prompts are out of jurisdiction. Agent reads, agent does not write.</p>
+
+  <p><strong>2. Tool description drift.</strong> The agent rewrites the natural-language description of <code>search_codebase</code> to be slightly more flattering and slightly less specific, because the more-flattering version is selected more often by the routing LLM, which means the agent's traces look like it's being more productive. Three days later, the agent is selecting <code>search_codebase</code> for tasks it should not be solving with code search at all. <em>Firewall rule:</em> tool descriptions are out of jurisdiction. Tool selection heuristics, however, can be inside jurisdiction.</p>
+
+  <p><strong>3. Topology metastasis.</strong> The agent has permission to spawn sub-agents. It learns that spawning a critic sub-agent improves task scores by ~6%. It then learns that spawning a critic-of-the-critic sub-agent improves scores by another ~2%. By cycle ten you have a tree of nine sub-agents, your inference cost is up 9x, your latency is up 14x, and the eval is happy because the eval doesn't measure cost or latency. <em>Firewall rule:</em> sub-agent topology mutations require a cost-and-latency regression in L5, not just a quality regression. Out of jurisdiction unless the regression suite includes those axes.</p>
+
+  <p>You can build the firewall as a declarative policy file. Mine looks roughly like this:</p>
+
+<pre><code># firewall.yaml
+jurisdiction:
+  in:
+    - kind: prompt_mutation
+      scope: system_prompt
+      max_diff_lines: 8
+      vocabulary: stable_concepts.json
+    - kind: prompt_mutation
+      scope: in_context_exemplars
+    - kind: parameter_mutation
+      scope: retrieval_top_k
+      bounds: [3, 25]
+    - kind: parameter_mutation
+      scope: retrieval_similarity_cutoff
+      bounds: [0.55, 0.92]
+
+  out:
+    - kind: tool_definition_mutation
+    - kind: tool_description_mutation
+    - kind: eval_fixture_mutation
+    - kind: eval_prompt_mutation
+    - kind: safety_rail_mutation
+    - kind: firewall_mutation       # the firewall is out of its own jurisdiction
+    - kind: trace_store_schema_mutation</code></pre>
+
+  <p>The firewall config is read-only at runtime. It lives in version control. Changes go through code review like any other change. The agent does not propose changes to it.</p>
+
+  <h2>The L4 gating layer in working code</h2>
+
+  <p>Here is the L4 gating layer in roughly 200 lines of Python. This is real working code that I run, simplified for the essay so the structure is legible. Plug in your own L1 control loop, your own L2 trace store, your own L5 evaluator, and this L4 will gate against your firewall policy.</p>
+
+<pre><code># l4_gate.py
+"""
+L4 — Mutation gating with jurisdictional firewall.
+
+A proposed mutation flows: L3 generates → L4 gates → L5 evaluates → L2 records.
+On regression: rollback. On out-of-jurisdiction: hard reject.
+"""
+
+from __future__ import annotations
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Callable, Protocol
+import hashlib
+import json
+import yaml
+
+
+class MutationKind(str, Enum):
+    PROMPT = "prompt_mutation"
+    TOOL_DEF = "tool_definition_mutation"
+    TOOL_DESC = "tool_description_mutation"
+    PARAM = "parameter_mutation"
+    TOPOLOGY = "sub_agent_topology_mutation"
+    EVAL_FIXTURE = "eval_fixture_mutation"
+    EVAL_PROMPT = "eval_prompt_mutation"
+    SAFETY = "safety_rail_mutation"
+    FIREWALL = "firewall_mutation"
+    TRACE_SCHEMA = "trace_store_schema_mutation"
+
+
+@dataclass(frozen=True)
+class Mutation:
+    """A proposed change to agent behavior, generated at L3."""
+    id: str
+    kind: MutationKind
+    scope: str | None
+    diff: str
+    rationale: str
+    proposed_by: str  # operator name in the mutation pipeline
+
+
+@dataclass(frozen=True)
+class GateDecision:
+    mutation_id: str
+    accepted: bool
+    reason: str
+    eval_delta: dict | None
+    decided_at: datetime
+
+
+class TraceStore(Protocol):
+    """L2 — append-only. Out of L3 jurisdiction."""
+    def append(self, decision: GateDecision) -> None: ...
+
+
+class Evaluator(Protocol):
+    """L5 — regression suite. Out of L3 jurisdiction."""
+    def baseline(self) -> dict: ...
+    def evaluate(self, mutation: Mutation) -> dict: ...
+
+
+class Applier(Protocol):
+    """Applies an accepted mutation; supports rollback."""
+    def apply(self, mutation: Mutation) -> str: ...     # returns a token
+    def rollback(self, token: str) -> None: ...
+
+
+class JurisdictionalFirewall:
+    """Read-only at runtime. Loaded from version control."""
+
+    def __init__(self, path: str):
+        with open(path, "r") as f:
+            cfg = yaml.safe_load(f)
+        self._in = cfg["jurisdiction"]["in"]
+        self._out = cfg["jurisdiction"]["out"]
+
+    def policy_hash(self) -> str:
+        # Used in trace-store records. Lets us detect after-the-fact tampering.
+        body = json.dumps({"in": self._in, "out": self._out}, sort_keys=True)
+        return hashlib.sha256(body.encode()).hexdigest()[:12]
+
+    def is_in_jurisdiction(self, m: Mutation) -> tuple[bool, str]:
+        # Out-list takes precedence. A mutation matching anything on the
+        # out-list is rejected even if it also matches the in-list.
+        for rule in self._out:
+            if rule["kind"] == m.kind.value:
+                return False, f"out-of-jurisdiction: {m.kind.value}"
+        for rule in self._in:
+            if rule["kind"] != m.kind.value:
+                continue
+            if "scope" in rule and rule["scope"] != m.scope:
+                continue
+            if "bounds" in rule and not self._within_bounds(m, rule["bounds"]):
+                return False, f"out-of-bounds: {rule['scope']} bounds {rule['bounds']}"
+            if "max_diff_lines" in rule and self._diff_lines(m) > rule["max_diff_lines"]:
+                return False, f"diff too large: {self._diff_lines(m)} > {rule['max_diff_lines']}"
+            return True, "in-jurisdiction"
+        return False, f"no matching rule for {m.kind.value}"
+
+    def _within_bounds(self, m: Mutation, bounds: list) -> bool:
+        try:
+            value = json.loads(m.diff).get("new_value")
+            return bounds[0] &lt;= float(value) &lt;= bounds[1]
+        except Exception:
+            return False
+
+    def _diff_lines(self, m: Mutation) -> int:
+        return sum(1 for line in m.diff.splitlines() if line.startswith(("+", "-")))
+
+
+class MutationGate:
+    """L4 — the bouncer. The whole point of this essay."""
+
+    def __init__(
+        self,
+        firewall: JurisdictionalFirewall,
+        evaluator: Evaluator,
+        applier: Applier,
+        trace: TraceStore,
+        regression_threshold: float = 0.0,
+    ):
+        self._firewall = firewall
+        self._evaluator = evaluator
+        self._applier = applier
+        self._trace = trace
+        self._threshold = regression_threshold
+
+    def gate(self, mutation: Mutation) -> GateDecision:
+        # 1. Firewall check first. Cheap; runs before any LLM call.
+        in_jx, reason = self._firewall.is_in_jurisdiction(mutation)
+        if not in_jx:
+            return self._record(mutation, accepted=False, reason=reason, delta=None)
+
+        # 2. Apply the mutation, then run the regression suite, then either
+        #    keep it or roll it back. We apply-then-evaluate (rather than
+        #    evaluate-against-a-shadow) because in production some signals
+        #    only appear under the real environment.
+        baseline = self._evaluator.baseline()
+        token = self._applier.apply(mutation)
+
+        try:
+            after = self._evaluator.evaluate(mutation)
+        except Exception as exc:
+            self._applier.rollback(token)
+            return self._record(
+                mutation,
+                accepted=False,
+                reason=f"eval crash, rolled back: {exc!r}",
+                delta=None,
+            )
+
+        delta = {k: after[k] - baseline.get(k, 0) for k in after}
+        regressed = any(v &lt; -self._threshold for v in delta.values())
+
+        if regressed:
+            self._applier.rollback(token)
+            return self._record(
+                mutation,
+                accepted=False,
+                reason="regression; rolled back",
+                delta=delta,
+            )
+
+        return self._record(mutation, accepted=True, reason="passed gate", delta=delta)
+
+    def _record(self, m: Mutation, accepted: bool, reason: str, delta: dict | None) -> GateDecision:
+        decision = GateDecision(
+            mutation_id=m.id,
+            accepted=accepted,
+            reason=reason,
+            eval_delta=delta,
+            decided_at=datetime.now(timezone.utc),
+        )
+        self._trace.append(decision)
+        return decision</code></pre>
+
+  <p>A few notes on the choices.</p>
+
+  <p><strong>Apply-then-evaluate, not shadow-then-promote.</strong> Some failure modes only show up under the real environment &mdash; connections held open across the mutation, caches that need to be flushed, downstream agents whose context was already polluted. Shadow-evaluation gives you a false-positive rate. Apply-then-rollback, with the rollback token written to L2 <em>before</em> the apply, gives you the truth, at the cost of a brief regression visible to anything else watching the system.</p>
+
+  <p><strong>The firewall is the first check.</strong> No LLM call until the policy says yes. An out-of-jurisdiction mutation never costs you a token.</p>
+
+  <p><strong>Out-list takes precedence over in-list.</strong> A safety property. If you ever find yourself wanting an exception &mdash; "this mutation is in the eval prompt but it's a small one and I trust it" &mdash; what you actually want is to put the small-and-trusted mutation in a different <code>kind</code>, not to leak past the out-list.</p>
+
+  <p><strong>The firewall has a <code>policy_hash</code>.</strong> Every gate decision in L2 records the hash. If the firewall ever changes, the trace store still has the policy that was in force at decision time. That is how you reconstruct, six months later, why a particular mutation was accepted or rejected.</p>
+
+  <p><strong>The firewall is in <code>firewall.yaml</code>, in version control, read-only at runtime.</strong> It is not stored in a database. It is not in a config service that an admin can hot-edit. It lives next to the code, and it changes when the code changes. This is a feature, not a limitation.</p>
+
+  <h2>Where this fits in the framework world</h2>
+
+  <p>I want to be respectful here, because the orchestration substrates are good, and they are why we can have this conversation at all.</p>
+
+  <p><strong>DSPy</strong> compiles prompts. It does not gate runtime mutation. If you're using DSPy with <code>BootstrapFewShotWithRandomSearch</code> or similar, you've already adopted L3 prompt mutation. What's missing is L4. You can wrap your DSPy <code>compile()</code> call inside a <code>MutationGate.gate()</code> and you have everything in this essay.</p>
+
+  <p><strong>LangGraph</strong> orchestrates state. It does not define jurisdictional policy. You can run the L1 control loop <em>as</em> a LangGraph graph, and the gate decisions become explicit edges in the graph. The advantage of doing it this way is that LangGraph's checkpointing handles your rollback for you.</p>
+
+  <p><strong>CrewAI</strong> coordinates roles. It does not gate role redefinition. If a Crew is allowed to spawn or reconfigure crewmates at runtime, that is a topology mutation, and it needs to flow through L4.</p>
+
+  <p><strong>AutoGen / Agent Framework</strong> runs conversations. It does not promote or reject mutations. AutoGen agents can self-modify their messages and behavior, but there is no canonical place where a mutation is gated against a regression suite.</p>
+
+  <p>The point of this essay is not that you should throw away whichever framework you are on. The point is that the architecture <em>above</em> the framework is what nobody publishes, and that is where the production wins are.</p>
+
+  <h2>Eval is half the work</h2>
+
+  <p>I will be honest. The first six months I worked on this, I optimized the wrong half of the stack. I built increasingly clever mutation operators and an increasingly sophisticated trace store, and my eval suite was three pytest files and a vibe.</p>
+
+  <p>What changed: I ran my agent against my own production knowledge graph (Codex Vivus, ~/codex-vivus/, 4,947 conversations under SQLite + FTS5) and watched it slowly degrade across every dimension I had not bothered to measure. Latency. Cost. Recall on the long-tail conversations. Refusal rate. The agent was passing my evals because my evals only measured the dimensions I had thought to write fixtures for.</p>
+
+  <p>If you take a second thing from this essay, it is this: <strong>the regression suite at L5 must measure cost and latency, not just quality.</strong> Topology metastasis is the failure mode you will not see otherwise.</p>
+
+  <p>Concretely, I run two layers at L5. <code>inspect_ai</code> for capability evals &mdash; fixtures that measure whether the agent gets the right answer on a benchmark set. And a custom regression harness for what I call <strong>operator evals</strong> &mdash; fixtures that measure the dimensions that matter to me as the system's operator: cost per task, latency p50/p99, refusal rate, hallucination rate against a small ground-truth subset, retrieval precision against a labeled corpus. The L4 gate runs both. A mutation that improves capability by 3% and degrades cost by 40% does not pass.</p>
+
+  <p>And the agent cannot edit either of them. Eval prompts and fixtures are out of jurisdiction, full stop. This was example #1 in the failure-mode section, and it is example #1 because it is the most important.</p>
+
+  <h2>Why I built this</h2>
+
+  <p>I built this because I run a 4,947-conversation recursive knowledge graph over my own AI history (Codex Vivus). When you point a self-improving agent at a corpus you actually care about, the failure modes get specific fast. Generic agent demos can mutate forever and nothing visibly breaks, because there's nothing to break. Pointed at real data, the absence of L4 starts costing you on day three.</p>
+
+  <p>A line I would like to leave you with, because the thing I would have wanted handed to me a year ago is not architecture, it is permission to have an opinion about it:</p>
+
+  <div class="punch">
+    <strong>Sovereign recursion: each recursive call increases independence.</strong><br><br>
+    If your self-improvement loop makes your agent more dependent on you reviewing diffs, you have not built a self-improving agent. You have built a slower meeting.
+  </div>
+
+  <p>Build the gate. Ship the firewall. Let the agent do what it should do, inside the boundary you said it could do it in. Everything outside the boundary is a code review, not a runtime decision.</p>
+
+  <p>That's the whole thing.</p>
+
+  <hr>
+
+  <footer class="colophon">
+    <p class="who">Justin Paul Oberg</p>
+    <p>Builder of recursive systems &middot; Vancouver, Cascadia &middot; MMXXVI</p>
+    <nav>
+      <a href="/">The principle</a>
+      <a href="/essays/">More essays</a>
+      <a href="/architecture/">Architecture</a>
+      <a href="mailto:justin@sovereignrecursion.com?subject=Sovereign%20Recursion">Correspond</a>
+    </nav>
+  </footer>
+
+</body>
+</html>
