@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5efe2"/>
+      <stop offset="1" stop-color="#ebe2d0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- top ornament -->
+  <g transform="translate(600, 90)">
+    <text text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="22" letter-spacing="14" fill="#8b3a1c">◆ &#160; · &#160; ◆</text>
+  </g>
+
+  <!-- brand mark -->
+  <g transform="translate(600, 175)">
+    <text text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="28" font-weight="500" letter-spacing="14" fill="#1a1410">SOVEREIGN RECURSION</text>
+  </g>
+
+  <!-- subtitle -->
+  <g transform="translate(600, 215)">
+    <text text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-style="italic" font-size="22" fill="#7a6e5e">A principle, stated.</text>
+  </g>
+
+  <!-- divider -->
+  <line x1="280" y1="265" x2="920" y2="265" stroke="#c8bea7" stroke-width="0.5"/>
+
+  <!-- the principle -->
+  <g transform="translate(600, 340)" font-family="Cormorant Garamond, Georgia, serif" fill="#1a1410">
+    <text text-anchor="middle" font-size="44" font-weight="400">
+      Each recursive call <tspan font-style="italic">must</tspan> increase independence.
+    </text>
+    <text text-anchor="middle" font-size="44" font-weight="400" y="64">
+      A loop that grows more dependent is not improvement.
+    </text>
+    <text text-anchor="middle" font-size="44" font-weight="500" font-style="italic" fill="#8b3a1c" y="128">
+      It is capture.
+    </text>
+  </g>
+
+  <!-- divider -->
+  <line x1="280" y1="525" x2="920" y2="525" stroke="#c8bea7" stroke-width="0.5"/>
+
+  <!-- attribution -->
+  <g transform="translate(600, 565)">
+    <text text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="14" letter-spacing="3" fill="#6e6557">
+      JUSTIN PAUL OBERG &#160;·&#160; VANCOUVER, CASCADIA &#160;·&#160; MMXXVI
+    </text>
+  </g>
+  <g transform="translate(600, 590)">
+    <text text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing="3" fill="#8b3a1c">
+      sovereignrecursion.com
+    </text>
+  </g>
+</svg>
