@@ -168,9 +168,9 @@
     }
     btn.textContent = 'Sending…'; btn.disabled = true; status.style.display = 'none';
     var fd = new FormData();
-    fd.append('Email', document.getElementById('waitlistEmail').value);
-    fd.append('Source', 'sovereignrecursion_essays_waitlist');
-    fd.append('Form', 'waitlist');
+    fd.append('email', document.getElementById('waitlistEmail').value);
+    fd.append('source', 'sovereignrecursion_essays_waitlist');
+    fd.append('form', 'waitlist');
     fetch('https://script.google.com/macros/s/AKfycbx-ObsqmyFUYUeFsQjVri4lt42scvHeztXXDU43PCxDbnLeuc1RLZEhW1ME21V2YBUXCQ/exec', {
       method: 'POST', mode: 'no-cors', body: fd
     }).then(function(){
